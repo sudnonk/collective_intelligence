@@ -7,13 +7,13 @@ import (
 
 func main() {
 	config.Set(config.Config{
-		ResourceMax:   314,
+		ResourceMax:   200,
 		ResourceMin:   0,
 		ResourceLimit: 10,
 		RecoverNormal: 100,
-		MaxWidth:      10,
+		MaxWidth:      20,
 		MinWidth:      1,
-		WidthCost:     20,
+		WidthCost:     200,
 		CellCost:      100,
 		MutationRate:  0.1,
 		WorldSizeX:    100,
