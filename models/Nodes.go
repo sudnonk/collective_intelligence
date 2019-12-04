@@ -42,5 +42,7 @@ func (ns *Nodes) Merge() {
 }
 
 func NewCells() *Nodes {
-	return &Nodes{}
+	return &Nodes{
+		utils.NewMutexMap(),
+	}
 }

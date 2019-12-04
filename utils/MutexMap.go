@@ -53,3 +53,10 @@ func (mm *MutexMap) Merge() {
 		mm.readonly[key] = value
 	}
 }
+
+func NewMutexMap() MutexMap {
+	return MutexMap{
+		readonly: map[interface{}]interface{}{},
+		dirty:    map[interface{}]interface{}{},
+	}
+}

@@ -33,5 +33,7 @@ func (ps *MutexPaths) Merge() {
 }
 
 func NewPaths() *MutexPaths {
-	return &MutexPaths{}
+	return &MutexPaths{
+		utils.NewMutexMap(),
+	}
 }
