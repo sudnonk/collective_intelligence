@@ -43,7 +43,7 @@ func Visualize(step int64) {
 
 			var cop string
 			if p.Transit == 0 {
-				cop = "black"
+				cop = "blue"
 			} else {
 				cop = "red"
 			}
