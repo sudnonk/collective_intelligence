@@ -54,6 +54,9 @@ func (c *Cell) getPaths() *Paths {
 
 //この細胞の思考回路
 func (c *Cell) Brain() {
+	//ダメージを受ける
+	c.bombed()
+
 	//死亡判定
 	if c.deathDetermination() {
 		return
@@ -89,6 +92,13 @@ func (c *Cell) Brain() {
 
 	debug.Printf("%s did nothing.", c.Id)
 	return
+}
+
+//爆撃の範囲内ならダメージを受ける
+func (c *Cell) bombed() {
+	if isBombed(c.Point) {
+		c.Resource -= BombDamage()
+	}
 }
 
 //死亡判定、死んでたらtrue

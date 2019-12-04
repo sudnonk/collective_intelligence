@@ -24,8 +24,9 @@ func JsonLogger(step int64) {
 	})
 
 	js := map[string]interface{}{
-		"Cells": cs,
-		"Paths": ps,
+		"Cells":  cs,
+		"Paths":  ps,
+		"Bombed": BombPoint,
 	}
 
 	j, err := json.Marshal(js)

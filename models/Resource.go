@@ -52,3 +52,7 @@ func ResourceMax() Resource {
 func ResourceLimit() Resource {
 	return Resource(config.ResourceLimit())
 }
+
+func BombDamage() Resource {
+	return Resource(config.BombDamage())
+}

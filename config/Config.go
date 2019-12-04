@@ -15,6 +15,8 @@ type Config struct {
 	MaxStep       int64   //世界の寿命
 	MinDist       float64 //細胞同士が最低限離れている距離
 	EffectDist    int     //栄養計算に使う細胞の範囲の距離
+	BombRadius    int     //爆撃の範囲
+	BombDamage    int     //爆撃のダメージ
 }
 
 var config Config
@@ -83,4 +85,12 @@ func EffectDist() int {
 		panic("config.EffectDist must be 2の倍数")
 	}
 	return config.EffectDist
+}
+
+func BombRadius() int {
+	return config.BombRadius
+}
+
+func BombDamage() int {
+	return config.BombDamage
 }

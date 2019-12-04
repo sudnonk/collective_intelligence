@@ -21,6 +21,8 @@ func main() {
 		MaxStep:       1000,
 		MinDist:       5,
 		EffectDist:    40,
+		BombRadius:    10,
+		BombDamage:    200,
 	})
 
 	//debug.EnableDebug()

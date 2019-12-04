@@ -22,6 +22,12 @@ var Roads *MutexPaths
 //その時点で世界座標上のどこに細胞があるか
 var Grid *mat.Dense
 
+//その時点で爆撃の影響を受ける範囲はどこか
+var BombArea *mat.Dense
+
+//その時点で爆撃された地点
+var BombPoint *Point
+
 //世界を実行する
 func Run() {
 	seed, _ := crand.Int(crand.Reader, big.NewInt(math.MaxInt64))
@@ -40,6 +46,7 @@ func Run() {
 	for step := int64(0); step < config.MaxStep(); step++ {
 		s := time.Now().Nanosecond()
 		UpdateGrid()
+		decideBombArea()
 
 		var wg sync.WaitGroup
 
@@ -105,6 +112,7 @@ func removeDead() {
 	})
 }
 
+//細胞の場所行列を更新する
 func UpdateGrid() {
 	Grid = mat.NewDense(config.WorldSizeX(), config.WorldSizeY(), nil)
 
@@ -129,6 +137,7 @@ func CalcRecover(p *Point) Resource {
 	return newResource(int64(math.Round(float64(config.RecoverNormal()) / float64(r))))
 }
 
+//場所行列から一部を抜き出す
 func cutMatrix(p *Point, r int) mat.Matrix {
 	x1 := utils.Min(utils.Max(p.X-r, 0), config.WorldSizeX()-r*2)
 	x2 := utils.Min(utils.Max(p.X+r, r*2), config.WorldSizeX())
@@ -137,6 +146,7 @@ func cutMatrix(p *Point, r int) mat.Matrix {
 	return Grid.Slice(x1, x2, y1, y2)
 }
 
+//場所行列内にある細胞の数を数える
 func countMatrix(size int, s mat.Matrix) int {
 	r := 0
 	for i := 0; i < size; i++ {
@@ -147,6 +157,7 @@ func countMatrix(size int, s mat.Matrix) int {
 	return r
 }
 
+//Pathsからその細胞に繋がっているPathsを探して返す
 func findPaths(c *Cell) *Paths {
 	ps := Paths{}
 
@@ -160,4 +171,24 @@ func findPaths(c *Cell) *Paths {
 	})
 
 	return &ps
+}
+
+//爆撃影響範囲を決める
+func decideBombArea() {
+	BombPoint = randomPoint()
+	BombArea = mat.NewDense(config.WorldSizeX(), config.WorldSizeY(), nil)
+	for i := BombPoint.X - config.BombRadius(); i < BombPoint.X+config.BombRadius(); i++ {
+		for j := BombPoint.Y - config.BombRadius(); j < BombPoint.Y+config.BombRadius(); j++ {
+			if i < 0 || i > config.WorldSizeX() || j < 0 || j > config.WorldSizeY() {
+				continue
+			}
+
+			BombArea.Set(i, j, 1)
+		}
+	}
+}
+
+//その地点が爆撃範囲かを返す
+func isBombed(p *Point) bool {
+	return int(BombArea.At(p.X, p.Y)) == 1
 }
