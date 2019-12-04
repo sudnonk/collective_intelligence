@@ -1,7 +1,7 @@
 package models
 
 import (
-	"log"
+	"github.com/sudnonk/collective_intelligence/debug"
 	"math/rand"
 
 	"github.com/sudnonk/collective_intelligence/config"
@@ -65,13 +65,13 @@ func (c *Cell) Brain() {
 	//助けが必要か
 	if c.needsHelp() {
 		//助けが必要なら何もしない
-		log.Printf("%s needs help.", c.Id)
+		debug.Printf("%s needs help.", c.Id)
 		return
 	}
 
 	//周りを助ける
 	if c.helpOthers() {
-		log.Printf("%s helped neighbors.", c.Id)
+		debug.Printf("%s helped neighbors.", c.Id)
 
 		return
 	}
@@ -79,15 +79,15 @@ func (c *Cell) Brain() {
 	//道を拡張するか、新しい細胞を作る
 	if c.makeNewCell() {
 		//新しい細胞を作れたら終わり
-		log.Printf("%s made new cell.", c.Id)
+		debug.Printf("%s made new cell.", c.Id)
 		return
 	} else if c.upgradePath() {
 		//道をアップグレードする。資源が足りなかったら何もしない
-		log.Printf("%s upgrads path.", c.Id)
+		debug.Printf("%s upgrads path.", c.Id)
 		return
 	}
 
-	log.Printf("%s did nothing.", c.Id)
+	debug.Printf("%s did nothing.", c.Id)
 	return
 }
 
@@ -178,6 +178,8 @@ func (c *Cell) makeNewCell() bool {
 
 			c2 = newCellRandom(c, a)
 			if i > 100 {
+				debug.Printf("no space around %s.", c.Id)
+
 				return false
 			}
 		}
@@ -194,6 +196,7 @@ func (c *Cell) makeNewCell() bool {
 
 		return true
 	} else {
+		debug.Printf("not enough resource %s", c.Id)
 		return false
 	}
 }

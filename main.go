@@ -7,7 +7,7 @@ import (
 
 func main() {
 	config.Set(config.Config{
-		ResourceMax:   200,
+		ResourceMax:   500,
 		ResourceMin:   0,
 		ResourceLimit: 10,
 		RecoverNormal: 100,
@@ -22,6 +22,8 @@ func main() {
 		MinDist:       5,
 		EffectDist:    40,
 	})
+
+	//debug.EnableDebug()
 
 	models.Run()
 }
