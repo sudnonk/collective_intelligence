@@ -39,16 +39,15 @@ func Run() {
 
 	for step := int64(0); step < config.MaxStep(); step++ {
 		s := time.Now().Nanosecond()
+		UpdateGrid()
+
 		var wg sync.WaitGroup
-		var m sync.Mutex
 
 		Cells.Range(func(k interface{}, v interface{}) bool {
 			c := Cells.Get(k)
 			wg.Add(1)
 			go func(c *Cell) {
-				m.Lock()
 				c.Brain()
-				m.Unlock()
 				wg.Done()
 			}(c)
 			return true
@@ -56,7 +55,6 @@ func Run() {
 		wg.Wait()
 
 		removeDead()
-		UpdateGrid()
 
 		Cells.Merge()
 		Roads.Merge()
