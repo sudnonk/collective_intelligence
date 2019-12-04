@@ -1,6 +1,7 @@
 package models
 
 import (
+	"log"
 	"math/rand"
 
 	"github.com/sudnonk/collective_intelligence/config"
@@ -64,20 +65,30 @@ func (c *Cell) Brain() {
 	//助けが必要か
 	if c.needsHelp() {
 		//助けが必要なら何もしない
+		log.Printf("%s needs help.", c.Id)
 		return
 	}
 
 	//周りを助ける
-	c.helpOthers()
+	if c.helpOthers() {
+		log.Printf("%s helped neighbors.", c.Id)
+
+		return
+	}
 
 	//道を拡張するか、新しい細胞を作る
 	if c.makeNewCell() {
 		//新しい細胞を作れたら終わり
+		log.Printf("%s made new cell.", c.Id)
 		return
-	} else {
+	} else if c.upgradePath() {
 		//道をアップグレードする。資源が足りなかったら何もしない
-		c.upgradePath()
+		log.Printf("%s upgrads path.", c.Id)
+		return
 	}
+
+	log.Printf("%s did nothing.", c.Id)
+	return
 }
 
 //死亡判定、死んでたらtrue
@@ -124,7 +135,7 @@ func (c *Cell) needsHelp() bool {
 }
 
 //周りに助けを求めている人が居れば助ける
-func (c *Cell) helpOthers() {
+func (c *Cell) helpOthers() bool {
 	//接続している道
 	for _, p := range *c.getPaths() {
 		//道の向こうの細胞
@@ -141,9 +152,10 @@ func (c *Cell) helpOthers() {
 			c.Resource -= a
 
 			//その人を助けたら終わり
-			return
+			return true
 		}
 	}
+	return false
 }
 
 //新しい細胞とその間の道を作る。作れるだけの資源があって、作れたらtrue
@@ -215,7 +227,7 @@ func newCellRandom(c *Cell, a Resource) *Cell {
 }
 
 //道幅を広げる
-func (c *Cell) upgradePath() {
+func (c *Cell) upgradePath() bool {
 	//もし道を広げられるだけの資源があって
 	if c.Resource > WidthCost() {
 		for _, p := range *c.getPaths() {
@@ -225,11 +237,13 @@ func (c *Cell) upgradePath() {
 					//広げて終わり
 					c.Resource -= WidthCost()
 					p.expand()
-					return
+					return true
 				}
 			}
 		}
 	}
+
+	return false
 }
 
 func (c *Cell) isValid() bool {
