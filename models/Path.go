@@ -83,7 +83,7 @@ func (p *Path) canExpand() bool {
 
 //道を広げて、広げて欲しさをリセットする
 func (p *Path) expand() {
-	p.Width += 10
+	p.Width += 1
 	p.WantExpand = 0
 }
 

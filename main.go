@@ -13,7 +13,7 @@ func main() {
 		RecoverNormal: 100,
 		MaxWidth:      20,
 		MinWidth:      1,
-		WidthCost:     200,
+		WidthCost:     50,
 		CellCost:      100,
 		MutationRate:  0.1,
 		WorldSizeX:    100,
