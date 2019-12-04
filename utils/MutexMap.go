@@ -1,6 +1,9 @@
 package utils
 
+import "sync"
+
 type MutexMap struct {
+	mu       sync.Mutex
 	readonly map[interface{}]interface{}
 	dirty    map[interface{}]interface{}
 }
@@ -35,23 +38,29 @@ func (mm MutexMap) Range(f func(key interface{}, value interface{}) bool) {
 
 //dirtyに値を入れる
 func (mm *MutexMap) Set(key interface{}, value interface{}) {
+	mm.mu.Lock()
 	mm.dirty[key] = value
+	mm.mu.Unlock()
 }
 
 func (mm *MutexMap) Delete(key interface{}) {
+	mm.mu.Lock()
 	if mm.Exists(key) {
 		delete(mm.dirty, key)
 	}
+	mm.mu.Unlock()
 }
 
 //dirtyの内容をreadonlyに反映する
 func (mm *MutexMap) Merge() {
+	mm.mu.Lock()
 	for key := range mm.readonly {
 		delete(mm.readonly, key)
 	}
 	for key, value := range mm.dirty {
 		mm.readonly[key] = value
 	}
+	mm.mu.Unlock()
 }
 
 func NewMutexMap() MutexMap {
