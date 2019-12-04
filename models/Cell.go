@@ -173,10 +173,10 @@ func (c *Cell) makeNewCell() bool {
 		//それぞれを道でつなぐ
 		p1 := connect(c, c2)
 		p2 := connect(c2, c)
-		Roads.Store(p1.Id, p1)
-		Roads.Store(p2.Id, p2)
+		Roads.Set(p1.Id, p1)
+		Roads.Set(p2.Id, p2)
 
-		Cells.Store(c2.Id, c2)
+		Cells.Set(c2.Id, c2)
 
 		c.Resource = c.Resource - cost - a
 

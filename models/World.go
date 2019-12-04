@@ -34,7 +34,7 @@ func Run() {
 
 	//一つ目の細胞を配置
 	init := GenerateRandom()
-	Cells.Store(init.Id, init)
+	Cells.Set(init.Id, init)
 	UpdateGrid()
 
 	for step := int64(0); step < config.MaxStep(); step++ {
@@ -42,8 +42,8 @@ func Run() {
 		var wg sync.WaitGroup
 		var m sync.Mutex
 
-		Cells.sm.Range(func(k interface{}, v interface{}) bool {
-			c, _ := Cells.Load(k)
+		Cells.Range(func(k interface{}, v interface{}) bool {
+			c := Cells.Get(k)
 			wg.Add(1)
 			go func(c *Cell) {
 				m.Lock()
@@ -57,6 +57,10 @@ func Run() {
 
 		removeDead()
 		UpdateGrid()
+
+		Cells.Merge()
+		Roads.Merge()
+
 		t := time.Now().Nanosecond() - s
 		log.Printf("step %d took %f msec.", step, float64(t)/1e+6)
 
@@ -82,12 +86,12 @@ func canPut(p *Point) bool {
 
 //死んだ細胞は取り除く
 func removeDead() {
-	Cells.sm.Range(func(key, value interface{}) bool {
-		c, _ := Cells.Load(key)
+	Cells.Range(func(key, value interface{}) bool {
+		c := Cells.Get(key)
 		if c.IsDead {
 			//繋がっている道をすべて消す
-			Roads.sm.Range(func(key, value interface{}) bool {
-				p := Roads.Load(key)
+			Roads.Range(func(key, value interface{}) bool {
+				p := Roads.Get(key)
 				if p.Node1.Id == c.Id || p.Node2.Id == c.Id {
 					Roads.Delete(key)
 				}
@@ -106,8 +110,8 @@ func removeDead() {
 func UpdateGrid() {
 	Grid = mat.NewDense(config.WorldSizeX(), config.WorldSizeY(), nil)
 
-	Cells.sm.Range(func(key, value interface{}) bool {
-		c, _ := Cells.Load(key)
+	Cells.Range(func(key, value interface{}) bool {
+		c := Cells.Get(key)
 		Grid.Set(c.Point.X, c.Point.Y, 1)
 
 		return true
@@ -148,8 +152,8 @@ func countMatrix(size int, s mat.Matrix) int {
 func findPaths(c *Cell) *Paths {
 	ps := Paths{}
 
-	Roads.sm.Range(func(key, value interface{}) bool {
-		p := Roads.Load(key)
+	Roads.Range(func(key, value interface{}) bool {
+		p := Roads.Get(key)
 		if p.Node1.Id == c.Id || p.Node2.Id == c.Id {
 			ps[p.Id] = p
 		}

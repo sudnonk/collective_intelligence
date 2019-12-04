@@ -1,40 +1,35 @@
 package models
 
-import "sync"
+import (
+	"github.com/sudnonk/collective_intelligence/utils"
+)
 
 type MutexPaths struct {
-	sm sync.Map
+	mm utils.MutexMap
 }
 
 func (ps *MutexPaths) Exists(key interface{}) bool {
-	_, ok := ps.sm.Load(key)
-	return ok
+	return ps.mm.Exists(key)
 }
 
-func (ps *MutexPaths) Load(key interface{}) *Path {
-	val, ok := ps.sm.Load(key)
-	if !ok {
-		return nil
-	}
-
-	return val.(*Path)
+func (ps *MutexPaths) Get(key interface{}) *Path {
+	return ps.mm.Get(key).(*Path)
 }
 
-func (ps *MutexPaths) Store(key string, value *Path) {
-	ps.sm.Store(key, value)
+func (ps *MutexPaths) Set(key string, value *Path) {
+	ps.mm.Set(key, value)
 }
 
 func (ps *MutexPaths) Delete(key interface{}) {
-	ps.sm.Delete(key)
+	ps.mm.Delete(key)
 }
 
-func (ps *MutexPaths) Len() int {
-	i := 0
-	ps.sm.Range(func(key, value interface{}) bool {
-		i++
-		return true
-	})
-	return i
+func (ps *MutexPaths) Range(f func(key interface{}, value interface{}) bool) {
+	ps.mm.Range(f)
+}
+
+func (ps *MutexPaths) Merge() {
+	ps.mm.Merge()
 }
 
 func NewPaths() *MutexPaths {

@@ -8,16 +8,16 @@ import (
 
 func JsonLogger(step int64) {
 	cs := map[string]Cell{}
-	Cells.sm.Range(func(key, value interface{}) bool {
-		c, _ := Cells.Load(key)
+	Cells.Range(func(key, value interface{}) bool {
+		c := Cells.Get(key)
 		cs[c.Id] = *c
 
 		return true
 	})
 
 	ps := map[string]Path{}
-	Roads.sm.Range(func(key, value interface{}) bool {
-		p := Roads.Load(key)
+	Roads.Range(func(key, value interface{}) bool {
+		p := Roads.Get(key)
 		ps[p.Id] = *p
 
 		return true

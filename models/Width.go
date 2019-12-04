@@ -11,7 +11,7 @@ type Width int64
 func (w *Width) expand() error {
 	e := *w + 1
 	if e > MaxWidth() {
-		return fmt.Errorf("Width already maximum")
+		return fmt.Errorf("width already maximum")
 	} else {
 		*w = e
 

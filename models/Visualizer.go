@@ -33,8 +33,8 @@ func Visualize(step int64) {
 
 	ps := map[string]struct{}{}
 
-	Cells.sm.Range(func(key, value interface{}) bool {
-		c, _ := Cells.Load(key)
+	Cells.Range(func(key, value interface{}) bool {
+		c := Cells.Get(key)
 
 		for _, p := range *c.getPaths() {
 			if _, ok := ps[p.Id]; ok {

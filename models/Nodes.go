@@ -1,40 +1,44 @@
 package models
 
-import "sync"
+import (
+	"github.com/sudnonk/collective_intelligence/utils"
+)
 
 type Nodes struct {
-	sm sync.Map
+	mm utils.MutexMap
 }
 
 func (ns *Nodes) Exists(key interface{}) bool {
-	_, ok := ns.sm.Load(key)
-	return ok
+	return ns.mm.Exists(key)
 }
 
-func (ns *Nodes) Load(key interface{}) (*Cell, bool) {
-	val, ok := ns.sm.Load(key)
-	if !ok {
-		return nil, false
-	}
-
-	return val.(*Cell), true
+func (ns *Nodes) Get(key interface{}) *Cell {
+	return ns.mm.Get(key).(*Cell)
 }
 
-func (ns *Nodes) Store(key string, value *Cell) {
-	ns.sm.Store(key, value)
+func (ns *Nodes) Set(key string, value *Cell) {
+	ns.mm.Set(key, value)
 }
 
 func (ns *Nodes) Delete(key string) {
-	ns.sm.Delete(key)
+	ns.mm.Delete(key)
 }
 
 func (ns *Nodes) Len() int {
 	i := 0
-	ns.sm.Range(func(key, value interface{}) bool {
+	ns.mm.Range(func(key, value interface{}) bool {
 		i++
 		return true
 	})
 	return i
+}
+
+func (ns *Nodes) Range(f func(key interface{}, value interface{}) bool) {
+	ns.mm.Range(f)
+}
+
+func (ns *Nodes) Merge() {
+	ns.mm.Merge()
 }
 
 func NewCells() *Nodes {
