@@ -21,6 +21,9 @@ var config Config
 
 func Set(c Config) {
 	config = c
+	if ResourceMax() < CellCost()+WidthCost() {
+		panic("parameter invalid: cells cannot create any cells due to high cost.")
+	}
 }
 
 func ResourceMax() int64 {
