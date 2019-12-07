@@ -61,6 +61,9 @@ func Run() {
 		})
 		wg.Wait()
 
+		Cells.Merge()
+		Roads.Merge()
+
 		removeDead()
 
 		Cells.Merge()
