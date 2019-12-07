@@ -5,6 +5,7 @@ const top_button = $("#top");
 
 const canvas = $("#canvas");
 
+const cellId = $("#cell_id");
 const fearness = $("#fearness");
 const kindness = $("#kindness");
 const resource = $("#resource");
@@ -58,6 +59,7 @@ function show_info(json) {
     circles.on("click", function () {
         const id = $(this).attr("id").slice(2);
         const cell = json.Cells[id];
+        $(cellId).text(id);
         $(fearness).text((Math.round(cell.persona.fear * 100) / 100).toString());
         $(kindness).text((Math.round(cell.persona.kindness * 100) / 100).toString());
         $(resource).text(cell.resource.toString());
