@@ -58,7 +58,7 @@ function show_info(json) {
     circles.on("click", function () {
         const id = $(this).attr("id").slice(2);
         const cell = json.Cells[id];
-        fearness.innerText = cell.persona.fearness.toString();
+        fearness.innerText = cell.persona.fear.toString();
         kindness.innerText = cell.persona.kindness.toString();
         resource.innerText = cell.resource.toString();
     });
