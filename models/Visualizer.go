@@ -58,14 +58,19 @@ func Visualize(step int64) {
 		} else {
 			coc = "black"
 		}
-		//最大体力が2π
-		arg := (2 * math.Pi / ResourceMax().toFloat64()) * c.Resource.toFloat64()
 
 		canvas.Group(fmt.Sprintf("id='c-%s'", c.Id))
-		//扇形
-		canvas.Path(makeSectorD(*c.Point, arg, radius, stretch), fmt.Sprintf("fill='%s'", coc))
-		//外枠
-		canvas.Circle(c.Point.X*stretch, c.Point.Y*stretch, radius, fmt.Sprintf("stroke='%s' stroke-width='1' fill='none'", coc))
+		if c.Resource != ResourceMax() {
+			//最大体力が2π
+			arg := (2 * math.Pi / ResourceMax().toFloat64()) * c.Resource.toFloat64()
+			//扇形
+			canvas.Path(makeSectorD(*c.Point, arg, radius, stretch), fmt.Sprintf("fill='%s'", coc))
+			//外枠
+			canvas.Circle(c.Point.X*stretch, c.Point.Y*stretch, radius, fmt.Sprintf("stroke='%s' stroke-width='1' fill='none'", coc))
+		} else {
+			//外枠
+			canvas.Circle(c.Point.X*stretch, c.Point.Y*stretch, radius, fmt.Sprintf("stroke='%s' stroke-width='1' fill='%s'", coc, coc))
+		}
 		//クリック用の透明な円
 		canvas.Circle(c.Point.X*stretch, c.Point.Y*stretch, radius, fmt.Sprintf("fill='rgba(0,0,0,0)'"))
 		canvas.Gend()
