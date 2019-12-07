@@ -28,7 +28,6 @@ $(top_button).on("click", () => {
 function show() {
     Promise.all([get_json(step), get_svg(step)])
         .then((result) => {
-            console.log(result);
             const json = result[0];
             const svg = result[1];
             show_svg(svg);
@@ -53,6 +52,8 @@ function show_info(json) {
 
     circles.on("mouseover", () => {
         const id = $(this).attr("id");
+        console.log(id);
+        console.log(json.Cells);
         const cell = json.Cells[id];
         console.log(cell);
     });
