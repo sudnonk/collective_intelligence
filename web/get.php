@@ -2,7 +2,7 @@
 
     if ($_SERVER["REQUEST_METHOD"] === "GET") {
         $num = filter_input(INPUT_GET, "n", FILTER_VALIDATE_INT);
-        if (!is_int($num)) {
+        if (!is_int($num) || $num < 0 || $num > PHP_INT_MAX) {
             header($_SERVER["SERVER_PROTOCOL"] . " 400 Bad Request.", true, 400);
             exit();
         }
