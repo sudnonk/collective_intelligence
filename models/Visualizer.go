@@ -47,7 +47,7 @@ func Visualize(step int64) {
 			} else {
 				cop = "red"
 			}
-			canvas.Line(p.Node1.Point.X*stretch, p.Node1.Point.Y*stretch, p.Node2.Point.X*stretch, p.Node2.Point.Y*stretch, fmt.Sprintf("stroke='%s' stroke-width='%d'", cop, p.Width*2))
+			canvas.Line(p.Node1.Point.X*stretch, p.Node1.Point.Y*stretch, p.Node2.Point.X*stretch, p.Node2.Point.Y*stretch, fmt.Sprintf("id='p-%s' stroke='%s' stroke-width='%d'", p.Id, cop, p.Width*2))
 			ps[p.Id] = struct{}{}
 		}
 
@@ -59,10 +59,12 @@ func Visualize(step int64) {
 		}
 		rate := (c.Resource.toFloat64() / ResourceMax().toFloat64()) * 100
 
+		canvas.Group(fmt.Sprintf("id='c-%s'", c.Id))
 		//扇形
 		canvas.Circle(c.Point.X*stretch, c.Point.Y*stretch, diameter, fmt.Sprintf("stroke='%s' stroke-width='%d' stroke-dasharray='%f,%f' fill='none'", coc, diameter*2, rate, 100-rate))
 		//外枠
 		canvas.Circle(c.Point.X*stretch, c.Point.Y*stretch, diameter*2, fmt.Sprintf("stroke='%s' stroke-width='1' fill='none'", coc))
+		canvas.Gend()
 
 		//爆撃範囲
 		canvas.Rect(BombPoint.X*stretch, BombPoint.Y*stretch, 10*stretch, 10*stretch, fmt.Sprintf("fill='yellow'"))
