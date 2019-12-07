@@ -43,15 +43,11 @@ async function get_json(step) {
         .catch((error) => console.error(error))
 }
 
-/**
- * @param json Object
- */
 function show_info(json) {
-    const num = json.Cells.length;
-    console.log(num);
+    const num = Object.keys(json.Cells).length;
 
-    info_step.innerText = step;
-    info_cells.innerText = num;
+    info_step.innerText = step.toString();
+    info_cells.innerText = num.toString();
 }
 
 function visualize(json) {
