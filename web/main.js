@@ -58,15 +58,15 @@ function show_info(json) {
     circles.on("click", function () {
         const id = $(this).attr("id").slice(2);
         const cell = json.Cells[id];
-        $(fearness).text(cell.persona.fear.toString());
-        $(kindness).text(cell.persona.kindness.toString());
+        $(fearness).text((Math.round(cell.persona.fear * 100) / 100).toString());
+        $(kindness).text((Math.round(cell.persona.kindness * 100) / 100).toString());
         $(resource).text(cell.resource.toString());
     });
     paths.on("click", function () {
         const id = $(this).attr("id").slice(2);
         const path = json.Paths[id];
 
-        width.innerText = path.width;
+        $(width).text(path.width);
     })
 }
 
