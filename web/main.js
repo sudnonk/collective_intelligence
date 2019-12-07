@@ -13,6 +13,7 @@ prev.onclick = (ev) => {
 next.onclick = (ev) => {
     step++;
     const json = get_json(step);
+    console.log(json);
 };
 
 top_button.onclick = (ev) => {
@@ -23,6 +24,9 @@ top_button.onclick = (ev) => {
 function get_json(step) {
     fetch('get.php?n=' + step)
         .then((response) => response.json())
-        .then((json) => console.log(json))
         .catch((error) => console.error(error))
+}
+
+function show_info(json) {
+
 }
