@@ -31,6 +31,7 @@ $(top_button).on("click", () => {
 function show() {
     Promise.all([get_json(step), get_svg(step)])
         .then((result) => {
+            console.log(result);
             const json = result[0];
             const svg = result[1];
             show_info(json);
@@ -38,13 +39,13 @@ function show() {
         });
 }
 
-async function get_json(step) {
+function get_json(step) {
     return fetch('get.php?t=j&n=' + step)
         .then((response) => response.json())
         .catch((error) => console.error(error))
 }
 
-async function get_svg(step) {
+function get_svg(step) {
     return fetch("get.php?t=s&n=" + step)
         .then((response) => response.text())
 }
