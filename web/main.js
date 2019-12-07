@@ -3,9 +3,6 @@ const start = $("#start");
 const next = $("#next");
 const top_button = $("#top");
 
-const fps_input = $("#fps");
-const sub = $("#sub");
-
 const canvas = $("#canvas");
 
 const cellId = $("#cell_id");
@@ -57,11 +54,8 @@ $(top_button).on("click", () => {
     show();
 });
 
-$(sub).on("click", () => {
-    fps = Number($(fps_input).val());
-    if (fps > 60) {
-        fps = 60;
-    }
+$("[id^=f-]").on("click", function () {
+    fps = $(this).data("fps");
 });
 
 function show() {
