@@ -201,6 +201,7 @@ func isBombed(p *Point) bool {
 		}
 	}
 
+	return false
 }
 
 func searchNear(c *Cell) (*Cell, bool) {
