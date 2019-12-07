@@ -2,6 +2,7 @@ package models
 
 import (
 	crand "crypto/rand"
+	"fmt"
 	"github.com/sudnonk/collective_intelligence/config"
 	"github.com/sudnonk/collective_intelligence/utils"
 	"gonum.org/v1/gonum/mat"
@@ -77,6 +78,10 @@ func Run() {
 		Visualize(step)
 		JsonLogger(step)
 		log.Printf("viaualization took %f msec.", float64(time.Now().Nanosecond()-s)/1e+6)
+
+		if Cells.Len() == 0 {
+			panic("全滅")
+		}
 	}
 }
 
@@ -178,7 +183,7 @@ func findPaths(c *Cell) *Paths {
 
 //爆撃影響範囲を決める
 func decideBombArea(step int64) {
-	hz := utils.Round(1 / config.BonbFrequency())
+	hz := utils.Round(1 / config.BombFrequency())
 	if step%hz == 0 {
 
 		BombPoint = randomPoint()
@@ -203,4 +208,28 @@ func isBombed(p *Point) bool {
 		return false
 	}
 	return int(BombArea.At(p.X, p.Y)) == 1
+}
+
+func searchNear(c *Cell) (*Cell, bool) {
+	m := cutMatrix(c.Point, config.SearchRadius())
+	for i := 0; i < config.SearchRadius(); i++ {
+		for j := 0; j < config.SearchRadius(); j++ {
+			//もし近くに細胞があって
+			if int(m.At(i, j)) == 1 {
+				id := fmt.Sprintf("%d,%d", i, j)
+				//本当に細胞があって
+				if Cells.Exists(id) {
+					t := Cells.Get(fmt.Sprintf("%d,%d", i, j))
+					for _, p := range *c.getPaths() {
+						//そことの間に道が繋がってなかったら
+						if p.Node1.Id == t.Id || p.Node2.Id == t.Id {
+							continue
+						}
+					}
+					return t, true
+				}
+			}
+		}
+	}
+	return c, false
 }

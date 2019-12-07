@@ -83,9 +83,13 @@ func (c *Cell) Brain() {
 		//新しい細胞を作れたら終わり
 		debug.Printf("%s made new cell.", c.Id)
 		return
+	} else if c.connectNear() {
+		//近くの細胞との間に道を作る。資源が足りなかったら何もしない。
+		debug.Printf("%s connect near.", c.Id)
+		return
 	} else if c.upgradePath() {
 		//道をアップグレードする。資源が足りなかったら何もしない
-		debug.Printf("%s upgrads path.", c.Id)
+		debug.Printf("%s upgrades path.", c.Id)
 		return
 	}
 
@@ -173,7 +177,7 @@ func (c *Cell) makeNewCell() bool {
 	cost := WidthCost() + CellCost()
 
 	//もし必要なコストを賄えるだけの資源があれば
-	if c.Resource > cost {
+	if c.Resource-ResourceLimit() > cost {
 		//新しい細胞に渡す資源
 		a := (c.Resource - cost) / 2
 
@@ -257,6 +261,25 @@ func (c *Cell) upgradePath() bool {
 	}
 
 	return false
+}
+
+//近くの細胞との間に道を作る
+func (c *Cell) connectNear() bool {
+	//もし資源が十分あって
+	if c.Resource-ResourceLimit() > 2*WidthCost() {
+		n, f := searchNear(c)
+		//近くに繋がってない細胞があれば
+		if f == false {
+			return false
+		}
+
+		//繋げる
+		connect(c, n)
+		c.Resource -= 2 * WidthCost()
+		return true
+	} else {
+		return false
+	}
 }
 
 func (c *Cell) isValid() bool {

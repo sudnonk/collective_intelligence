@@ -18,6 +18,7 @@ type Config struct {
 	BombRadius    int     //爆撃の範囲
 	BombDamage    int     //爆撃のダメージ
 	BombFrequency float64 //爆撃頻度
+	SearchRadius  int     //近傍の細胞を探す距離
 }
 
 var config Config
@@ -96,6 +97,10 @@ func BombDamage() int {
 	return config.BombDamage
 }
 
-func BonbFrequency() float64 {
+func BombFrequency() float64 {
 	return config.BombFrequency
+}
+
+func SearchRadius() int {
+	return config.SearchRadius
 }

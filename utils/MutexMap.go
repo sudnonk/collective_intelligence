@@ -12,8 +12,8 @@ type MutexMap struct {
 
 //readonlyに値があるか調べる
 func (mm MutexMap) Exists(key interface{}) bool {
-	_, ok := mm.readonly[key]
-	return ok
+	v, ok := mm.readonly[key]
+	return ok && v != nil
 }
 
 //readonlyから値を取得する

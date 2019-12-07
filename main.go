@@ -24,6 +24,7 @@ func main() {
 		BombRadius:    10,
 		BombDamage:    200,
 		BombFrequency: 0.2,
+		SearchRadius:  5,
 	})
 
 	//debug.EnableDebug()
