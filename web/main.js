@@ -12,24 +12,30 @@ let step = 0;
 
 prev.onclick = (ev) => {
     step--;
-    get_json(step)
-        .then((json) => {
-            console.log(json)
-            show_info(json);
-            visualize(json);
-        })
+    if (step < 0) {
+        step = 0;
+    }
+    show();
 };
 
 next.onclick = (ev) => {
     step++;
-    const json = get_json(step);
-    console.log(json);
+    show();
 };
 
 top_button.onclick = (ev) => {
     step = 0;
-    const json = get_json(step);
+    show();
 };
+
+function show() {
+    get_json(step)
+        .then((json) => {
+            console.log(json);
+            show_info(json);
+            visualize(json);
+        })
+}
 
 async function get_json(step) {
     return fetch('get.php?n=' + step)
