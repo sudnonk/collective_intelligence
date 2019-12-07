@@ -110,7 +110,7 @@ function animation_start() {
     frame++;
     if (frame % fps === 0) {
         show(frame / fps);
-        step = frame / fps;
+        step++;
     }
     anime = window.requestAnimationFrame(animation_start);
     is_on = true;
