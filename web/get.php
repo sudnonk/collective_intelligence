@@ -8,6 +8,7 @@
         }
 
         $file_name = sprintf("%s../json/%d.json", __DIR__, $num);
+        var_dump($file_name);
         if (file_exists($file_name) && mime_content_type($file_name) === "application/json") {
             header("Content-Type: application/json");
             header("Content-Length: " . filesize($file_name));
