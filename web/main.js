@@ -121,8 +121,12 @@ let frame = 0;
 let anime;
 
 function animation_start() {
+
     frame++;
     if (frame % fps === 0) {
+        if (step > 999) {
+            animation_end();
+        }
         show(frame / fps);
         step++;
     }
