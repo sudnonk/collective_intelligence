@@ -54,7 +54,7 @@ func (p *Path) out(c *Cell) Resource {
 		return 0
 	} else {
 		//もし渡す先が受け取った先と同じなら
-		if isSame(c.Point, p.From.Point) {
+		if p.From != nil && isSame(c.Point, p.From.Point) {
 			//何も渡さない
 			return 0
 		} else {
