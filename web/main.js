@@ -30,9 +30,9 @@ let is_on = false;
 
 function toggle_button() {
     if (is_on) {
-        $(start).text("開始");
-    } else {
         $(start).text("停止");
+    } else {
+        $(start).text("開始");
     }
 }
 
