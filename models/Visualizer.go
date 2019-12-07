@@ -68,7 +68,7 @@ func Visualize(step int64) {
 		//外枠
 		canvas.Circle(c.Point.X*stretch, c.Point.Y*stretch, radius, fmt.Sprintf("stroke='%s' stroke-width='1' fill='none'", coc))
 		//クリック用の透明な円
-		canvas.Circle(c.Point.X*stretch, c.Point.Y*stretch, radius, fmt.Sprintf("fill='none'"))
+		canvas.Circle(c.Point.X*stretch, c.Point.Y*stretch, radius, fmt.Sprintf("fill='rgba(0,0,0,0)'"))
 		canvas.Gend()
 
 		//爆撃範囲
