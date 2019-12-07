@@ -10,3 +10,6 @@
 2. `go build`
 3. Run `collective_intelligence` executable file.
 4. Results will be generated into `json/`
+
+If you encounter errors like `git fetch-pack: expected shallow list`, try upgrading git package.
+(In my CentOS 7 server, yum provides git 1.8. But git fetch-pack sub-command works only git >= 2.0, so I installed new one via IUS repo.)
