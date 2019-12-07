@@ -179,7 +179,7 @@ func decideBombArea() {
 	BombArea = mat.NewDense(config.WorldSizeX(), config.WorldSizeY(), nil)
 	for i := BombPoint.X - config.BombRadius(); i < BombPoint.X+config.BombRadius(); i++ {
 		for j := BombPoint.Y - config.BombRadius(); j < BombPoint.Y+config.BombRadius(); j++ {
-			if i < 0 || i > config.WorldSizeX() || j < 0 || j > config.WorldSizeY() {
+			if i < 0 || i >= config.WorldSizeX() || j < 0 || j >= config.WorldSizeY() {
 				continue
 			}
 
