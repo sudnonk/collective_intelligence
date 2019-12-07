@@ -2,3 +2,12 @@
     width: 900px;
     height: 900px;
 }
+
+#main {
+    display: flex;
+    flex-direction: row;
+}
+
+#info {
+    flex-direction: column;
+}

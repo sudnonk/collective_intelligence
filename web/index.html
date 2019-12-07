@@ -10,14 +10,34 @@
     <link rel="stylesheet" href="main.css">
 </head>
 <body>
-<div id="canvas">
+<div id="main">
+    <div id="canvas">
 
-</div>
-<div id="control">
-    <button id="prev">前</button>
-    <button id="start">開始</button>
-    <button id="next">次</button>
-    <button id="top">最初</button>
+    </div>
+    <div id="info">
+        <div id="control">
+            <button id="prev">前</button>
+            <button id="start">開始</button>
+            <button id="next">次</button>
+            <button id="top">最初</button>
+        </div>
+        <div id="cell_info">
+            <ul>
+                <li>性格：
+                    <ul>
+                        <li>やさしさ：<span id="kindness"></span></li>
+                        <li>恐怖心：<span id="fearness"></span></li>
+                    </ul>
+                </li>
+                <li>体力：<span id="resource"></span></li>
+            </ul>
+        </div>
+        <div id="path_info">
+            <ul>
+                <li>太さ：<span id="width"></span></li>
+            </ul>
+        </div>
+    </div>
 </div>
 <script src="main.js"></script>
 </body>
