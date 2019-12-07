@@ -97,11 +97,11 @@ func makeSectorD(center Point, arg float64, radius int, stretch int) string {
 
 	var pattern string
 	if arg > math.Pi {
-		pattern = fmt.Sprintf("%d,%d", 1, 1)
+		pattern = fmt.Sprintf("%d %d", 1, 1)
 	} else {
-		pattern = fmt.Sprintf("%d,%d", 0, 1)
+		pattern = fmt.Sprintf("%d %d", 0, 1)
 	}
 
 	//M中心座標 L始まり座標 A半径 0 パターン 終わり座標z
-	return fmt.Sprintf("M%d,%d L%d,%d A%d,%d 0 %s %d,%dz", center.X, center.Y, start.X, start.Y, radius, radius, pattern, end.X, end.Y)
+	return fmt.Sprintf("M %d,%d L %d,%d A %d %d 0 %s %d %d z", center.X, center.Y, start.X, start.Y, radius, radius, pattern, end.X, end.Y)
 }
