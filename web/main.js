@@ -5,6 +5,11 @@ const top_button = $("#top");
 
 const canvas = $("#canvas");
 
+const fearness = $("#fearness");
+const kindness = $("#kindness");
+const resource = $("#resource");
+const width = $("#width");
+
 let step = 0;
 
 $(prev).on("click", () => {
@@ -51,17 +56,17 @@ function show_info(json) {
     const paths = $("[id^=p-]");
 
     circles.on("click", function () {
-        console.log(this, $(this));
         const id = $(this).attr("id").slice(2);
-        console.log(id);
-        console.log(json.Cells);
         const cell = json.Cells[id];
-        console.log(cell);
+        fearness.innerText = cell.persona.fearness.toString();
+        kindness.innerText = cell.persona.kindness.toString();
+        resource.innerText = cell.resource.toString();
     });
     paths.on("click", function () {
         const id = $(this).attr("id").slice(2);
         const path = json.Paths[id];
-        console.log(path);
+
+        width.innerText = path.width;
     })
 }
 
