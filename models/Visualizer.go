@@ -3,7 +3,6 @@ package models
 import (
 	"fmt"
 	"github.com/ajstarks/svgo"
-	"github.com/sudnonk/collective_intelligence/utils"
 	"math"
 	"os"
 )
@@ -92,11 +91,6 @@ func makeSectorD(center Point, arg float64, radius int, stretch int) string {
 		Y: center.Y,
 	}
 
-	end := Point{
-		X: int(utils.Round(float64(center.X) + math.Cos(arg)*float64(radius))),
-		Y: int(utils.Round(float64(center.Y) - math.Sin(arg)*float64(radius))),
-	}
-
 	var pattern string
 	if arg > math.Pi {
 		pattern = fmt.Sprintf("%d %d", 1, 0)
@@ -105,5 +99,5 @@ func makeSectorD(center Point, arg float64, radius int, stretch int) string {
 	}
 
 	//M中心座標 L始まり座標 A半径 0 パターン 終わり座標z
-	return fmt.Sprintf("M %d %d L %d %d A %d %d 0 %s %d %d z", center.X, center.Y, start.X, start.Y, radius, radius, pattern, end.X, end.Y)
+	return fmt.Sprintf("M %d %d L %d %d A %d %d 0 %s %8.6f %8.6f z", center.X, center.Y, start.X, start.Y, radius, radius, pattern, float64(center.X)+math.Cos(arg)*float64(radius), float64(center.Y)-math.Sin(arg)*float64(radius))
 }
