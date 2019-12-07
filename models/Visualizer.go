@@ -64,7 +64,7 @@ func Visualize(step int64) {
 
 		canvas.Group(fmt.Sprintf("id='c-%s'", c.Id))
 		//扇形
-		canvas.Path(makeSectorD(*c.Point, arg, radius, stretch), fmt.Sprintf("stroke='%s' stroke-width='%d' fill='none'", coc, radius*2))
+		canvas.Path(makeSectorD(*c.Point, arg, radius, stretch), fmt.Sprintf("fill='%s'", coc))
 		//外枠
 		canvas.Circle(c.Point.X*stretch, c.Point.Y*stretch, radius*2, fmt.Sprintf("stroke='%s' stroke-width='1' fill='none'", coc))
 		//クリック用の透明な円
@@ -92,7 +92,7 @@ func makeSectorD(center Point, arg float64, radius int, stretch int) string {
 
 	end := Point{
 		X: int(utils.Round(float64(center.X) + math.Sin(arg)*float64(radius))),
-		Y: int(utils.Round(float64(center.Y) + math.Cos(arg)*float64(radius))),
+		Y: int(utils.Round(float64(center.Y) - math.Cos(arg)*float64(radius))),
 	}
 
 	var pattern string
