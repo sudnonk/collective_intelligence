@@ -10,7 +10,8 @@ const canvas = $("canvas");
 
 let step = 0;
 
-prev.on("click", (ev) => {
+prev.on("click", () => {
+    console.log($(this).innerText);
     step--;
     if (step < 0) {
         step = 0;
@@ -18,12 +19,12 @@ prev.on("click", (ev) => {
     show();
 });
 
-next.on("click", (ev) => {
+next.on("click", () => {
     step++;
     show();
 });
 
-top_button.on("click", (ev) => {
+top_button.on("click", () => {
     step = 0;
     show();
 });
