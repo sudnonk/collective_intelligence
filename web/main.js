@@ -30,7 +30,9 @@ $(top_button).on("click", () => {
 
 function show() {
     Promise.all([get_json(step), get_svg(step)])
-        .then((json, svg) => {
+        .then((result) => {
+            const json = result[0];
+            const svg = result[1];
             show_info(json);
             show_svg(svg);
         });
