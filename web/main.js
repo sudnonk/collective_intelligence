@@ -38,9 +38,9 @@ function toggle_button() {
 
 $(start).on("click", () => {
     if (is_on) {
-        animation_start();
-    } else {
         animation_end();
+    } else {
+        animation_start();
     }
 });
 
