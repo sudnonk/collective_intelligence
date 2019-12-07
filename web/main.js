@@ -3,9 +3,6 @@ const start = $("#start");
 const next = $("#next");
 const top_button = $("#top");
 
-const info_step = $("#step");
-const info_cells = $("#cells");
-
 const canvas = $("#canvas");
 
 let step = 0;
@@ -34,8 +31,8 @@ function show() {
             console.log(result);
             const json = result[0];
             const svg = result[1];
-            show_info(json);
             show_svg(svg);
+            show_info(json);
         });
 }
 
@@ -51,13 +48,21 @@ function get_svg(step) {
 }
 
 function show_info(json) {
-    const num = Object.keys(json.Cells).length;
+    const circles = $("[id^=c-]");
+    const paths = $("[id^=p-]");
 
-    $(info_step).text(step.toString());
-    $(info_cells).text(num.toString());
+    circles.on("mouseover", () => {
+        const id = $(this).attr("id");
+        const cell = json.Cells[id];
+        console.log(cell);
+    });
+    paths.on("mouseover", () => {
+        const id = $(this).attr("id");
+        const path = json.Paths[id];
+        console.log(path);
+    })
 }
 
 function show_svg(svg) {
-    console.log(svg);
     $(canvas).html(svg);
 }
