@@ -24,7 +24,7 @@
             exit();
         }
     } elseif ($type === "s") {
-        $file_name = realpath(sprintf("%s/../svg/%d.svg", __DIR__, $num));
+        $file_name = realpath(sprintf("%s/../svgs/%d.svg", __DIR__, $num));
         if (file_exists($file_name) && pathinfo($file_name, PATHINFO_EXTENSION) === "svg") {
             header("Content-Type: image/svg+xml");
             header("Content-Length: " . filesize($file_name));
