@@ -9,7 +9,7 @@ import (
 )
 
 const stretch = 8
-const radius = 5
+const radius = 10
 
 func Visualize(step int64) {
 	fn := fmt.Sprintf("svgs/%d.svg", step)
@@ -66,9 +66,9 @@ func Visualize(step int64) {
 		//扇形
 		canvas.Path(makeSectorD(*c.Point, arg, radius, stretch), fmt.Sprintf("fill='%s'", coc))
 		//外枠
-		canvas.Circle(c.Point.X*stretch, c.Point.Y*stretch, radius*2, fmt.Sprintf("stroke='%s' stroke-width='1' fill='none'", coc))
+		canvas.Circle(c.Point.X*stretch, c.Point.Y*stretch, radius, fmt.Sprintf("stroke='%s' stroke-width='1' fill='none'", coc))
 		//クリック用の透明な円
-		canvas.Circle(c.Point.X*stretch, c.Point.Y*stretch, radius*2, fmt.Sprintf("fill='none'"))
+		canvas.Circle(c.Point.X*stretch, c.Point.Y*stretch, radius, fmt.Sprintf("fill='none'"))
 		canvas.Gend()
 
 		//爆撃範囲
@@ -86,22 +86,22 @@ func makeSectorD(center Point, arg float64, radius int, stretch int) string {
 	center.Y *= stretch
 
 	start := Point{
-		X: center.X,
-		Y: center.Y + radius,
+		X: center.X + radius,
+		Y: center.Y,
 	}
 
 	end := Point{
-		X: int(utils.Round(float64(center.X) + math.Sin(arg)*float64(radius))),
-		Y: int(utils.Round(float64(center.Y) - math.Cos(arg)*float64(radius))),
+		X: int(utils.Round(float64(center.X) + math.Cos(arg)*float64(radius))),
+		Y: int(utils.Round(float64(center.Y) - math.Sin(arg)*float64(radius))),
 	}
 
 	var pattern string
 	if arg > math.Pi {
-		pattern = fmt.Sprintf("%d %d", 1, 1)
+		pattern = fmt.Sprintf("%d %d", 1, 0)
 	} else {
-		pattern = fmt.Sprintf("%d %d", 0, 1)
+		pattern = fmt.Sprintf("%d %d", 0, 0)
 	}
 
 	//M中心座標 L始まり座標 A半径 0 パターン 終わり座標z
-	return fmt.Sprintf("M %d,%d L %d,%d A %d %d 0 %s %d %d z", center.X, center.Y, start.X, start.Y, radius, radius, pattern, end.X, end.Y)
+	return fmt.Sprintf("M %d %d L %d %d A %d %d 0 %s %d %d z", center.X, center.Y, start.X, start.Y, radius, radius, pattern, end.X, end.Y)
 }
