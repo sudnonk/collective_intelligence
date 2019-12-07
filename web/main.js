@@ -50,15 +50,16 @@ function show_info(json) {
     const circles = $("[id^=c-]");
     const paths = $("[id^=p-]");
 
-    circles.on("mouseover", () => {
-        const id = $(this).attr("id");
+    circles.on("click", () => {
+        console.log(this, $(this));
+        const id = $(this).attr("id").slice(2);
         console.log(id);
         console.log(json.Cells);
         const cell = json.Cells[id];
         console.log(cell);
     });
-    paths.on("mouseover", () => {
-        const id = $(this).attr("id");
+    paths.on("click", () => {
+        const id = $(this).attr("id").slice(2);
         const path = json.Paths[id];
         console.log(path);
     })
