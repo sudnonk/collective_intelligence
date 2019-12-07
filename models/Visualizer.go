@@ -3,11 +3,13 @@ package models
 import (
 	"fmt"
 	"github.com/ajstarks/svgo"
+	"github.com/sudnonk/collective_intelligence/utils"
+	"math"
 	"os"
 )
 
 const stretch = 8
-const diameter = 5
+const radius = 5
 
 func Visualize(step int64) {
 	fn := fmt.Sprintf("svgs/%d.svg", step)
@@ -57,15 +59,16 @@ func Visualize(step int64) {
 		} else {
 			coc = "black"
 		}
-		rate := (c.Resource.toFloat64() / ResourceMax().toFloat64()) * 100
+		//最大体力が2π
+		arg := (2 * math.Pi / ResourceMax().toFloat64()) * c.Resource.toFloat64()
 
 		canvas.Group(fmt.Sprintf("id='c-%s'", c.Id))
 		//扇形
-		canvas.Circle(c.Point.X*stretch, c.Point.Y*stretch, diameter, fmt.Sprintf("stroke='%s' stroke-width='%d' stroke-dasharray='%f,%f' fill='none'", coc, diameter*2, rate, 100-rate))
+		canvas.Path(makeSectorD(*c.Point, arg, radius, stretch), fmt.Sprintf("stroke='%s' stroke-width='%d' fill='none'", coc, radius*2))
 		//外枠
-		canvas.Circle(c.Point.X*stretch, c.Point.Y*stretch, diameter*2, fmt.Sprintf("stroke='%s' stroke-width='1' fill='none'", coc))
+		canvas.Circle(c.Point.X*stretch, c.Point.Y*stretch, radius*2, fmt.Sprintf("stroke='%s' stroke-width='1' fill='none'", coc))
 		//クリック用の透明な円
-		canvas.Circle(c.Point.X*stretch, c.Point.Y*stretch, diameter*2, fmt.Sprintf("fill='none'"))
+		canvas.Circle(c.Point.X*stretch, c.Point.Y*stretch, radius*2, fmt.Sprintf("fill='none'"))
 		canvas.Gend()
 
 		//爆撃範囲
@@ -75,4 +78,30 @@ func Visualize(step int64) {
 	})
 
 	canvas.End()
+}
+
+//SVGで扇形を書く時のdを生成する
+func makeSectorD(center Point, arg float64, radius int, stretch int) string {
+	center.X *= stretch
+	center.Y *= stretch
+
+	start := Point{
+		X: center.X,
+		Y: center.Y + radius,
+	}
+
+	end := Point{
+		X: int(utils.Round(float64(center.X) + math.Sin(arg)*float64(radius))),
+		Y: int(utils.Round(float64(center.Y) + math.Cos(arg)*float64(radius))),
+	}
+
+	var pattern string
+	if arg > math.Pi {
+		pattern = fmt.Sprintf("%d,%d", 1, 1)
+	} else {
+		pattern = fmt.Sprintf("%d,%d", 0, 1)
+	}
+
+	//M中心座標 L始まり座標 A半径 0 パターン 終わり座標z
+	return fmt.Sprintf("M%d,%d L%d,%d A%d,%d 0 %s %d,%dz", center.X, center.Y, start.X, start.Y, radius, radius, pattern, end.X, end.Y)
 }
