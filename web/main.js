@@ -3,6 +3,9 @@ const start = $("#start");
 const next = $("#next");
 const top_button = $("#top");
 
+const fps_input = $("#fps");
+const sub = $("#sub");
+
 const canvas = $("#canvas");
 
 const cellId = $("#cell_id");
@@ -12,8 +15,10 @@ const resource = $("#resource");
 const width = $("#width");
 
 let step = 0;
+let fps = 5;
 
 $(prev).on("click", () => {
+    animation_end();
     step--;
     if (step < 0) {
         step = 0;
@@ -21,14 +26,42 @@ $(prev).on("click", () => {
     show();
 });
 
+let is_on = false;
+
+function toggle_button() {
+    if (is_on) {
+        $(start).text("開始");
+    } else {
+        $(start).text("停止");
+    }
+}
+
+$(start).on("click", () => {
+    if (is_on) {
+        animation_start();
+    } else {
+        animation_end();
+    }
+});
+
 $(next).on("click", () => {
+    animation_end();
     step++;
     show();
 });
 
 $(top_button).on("click", () => {
+    animation_end();
+    animation_reset();
     step = 0;
     show();
+});
+
+$(sub).on("click", () => {
+    fps = Number($(fps_input).val());
+    if (fps > 60) {
+        fps = 60;
+    }
 });
 
 function show() {
@@ -74,4 +107,30 @@ function show_info(json) {
 
 function show_svg(svg) {
     $(canvas).html(svg);
+}
+
+let frame = 0;
+let anime;
+
+function animation_start() {
+    frame++;
+    if (frame % fps === 0) {
+        show(frame / fps);
+        step = frame / fps;
+    }
+    anime = window.requestAnimationFrame(animation_start);
+    is_on = true;
+    toggle_button();
+}
+
+function animation_end() {
+    window.cancelAnimationFrame(anime);
+    is_on = false;
+    toggle_button();
+}
+
+function animation_reset() {
+    frame = 0;
+    is_on = false;
+    toggle_button();
 }
