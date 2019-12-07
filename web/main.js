@@ -1,46 +1,50 @@
-const prev = document.getElementById("prev");
-const start = document.getElementById("start");
-const next = document.getElementById("next");
-const top_button = document.getElementById("top");
+const prev = $("prev");
+const start = $("start");
+const next = $("next");
+const top_button = $("top");
 
-const info_step = document.getElementById("step");
-const info_cells = document.getElementById("cells");
+const info_step = $("step");
+const info_cells = $("cells");
 
-const canvas = document.getElementById("canvas");
+const canvas = $("canvas");
 
 let step = 0;
 
-prev.onclick = (ev) => {
+prev.on("click", (ev) => {
     step--;
     if (step < 0) {
         step = 0;
     }
     show();
-};
+});
 
-next.onclick = (ev) => {
+next.on("click", (ev) => {
     step++;
     show();
-};
+});
 
-top_button.onclick = (ev) => {
+top_button.on("click", (ev) => {
     step = 0;
     show();
-};
+});
 
 function show() {
-    get_json(step)
-        .then((json) => {
-            console.log(json);
+    Promise.all([get_json(step), get_svg(step)])
+        .then((json, svg) => {
             show_info(json);
-            visualize(json);
-        })
+            show_svg(svg);
+        });
 }
 
 async function get_json(step) {
-    return fetch('get.php?n=' + step)
+    return fetch('get.php?t=j&n=' + step)
         .then((response) => response.json())
         .catch((error) => console.error(error))
+}
+
+async function get_svg(step) {
+    return fetch("svg.php?t=s&n=" + step)
+        .then((response) => response.text())
 }
 
 function show_info(json) {
@@ -50,6 +54,6 @@ function show_info(json) {
     info_cells.innerText = num.toString();
 }
 
-function visualize(json) {
-
+function show_svg(svg) {
+    canvas.innerHTML = svg;
 }
