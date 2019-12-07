@@ -45,7 +45,7 @@ async function get_json(step) {
 }
 
 async function get_svg(step) {
-    return fetch("svg.php?t=s&n=" + step)
+    return fetch("get.php?t=s&n=" + step)
         .then((response) => response.text())
 }
 
