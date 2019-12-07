@@ -52,10 +52,11 @@ async function get_svg(step) {
 function show_info(json) {
     const num = Object.keys(json.Cells).length;
 
-    info_step.innerText = step.toString();
-    info_cells.innerText = num.toString();
+    $(info_step).text(step.toString());
+    $(info_cells).text(num.toString());
 }
 
 function show_svg(svg) {
-    canvas.innerHTML = svg;
+    console.log(svg);
+    $(canvas).html(svg);
 }
