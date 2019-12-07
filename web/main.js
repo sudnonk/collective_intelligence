@@ -5,7 +5,7 @@ const top_button = $("#top");
 
 const canvas = $("#canvas");
 
-const cellId = $("#cell_id");
+const cell_id = $("#cell_id");
 const fearness = $("#fearness");
 const kindness = $("#kindness");
 const resource = $("#resource");
@@ -13,6 +13,7 @@ const width = $("#width");
 
 let step = 0;
 let fps = 5;
+let selected_id;
 
 $(prev).on("click", () => {
     animation_end();
@@ -83,20 +84,33 @@ function show_info(json) {
     const circles = $("[id^=c-]");
     const paths = $("[id^=p-]");
 
+    if (selected_id !== null) {
+        show_cell(json, selected_id);
+    }
+
     circles.on("click", function () {
         const id = $(this).attr("id").slice(2);
-        const cell = json.Cells[id];
-        $(cellId).text(id);
-        $(fearness).text((Math.round(cell.persona.fear * 100) / 100).toString());
-        $(kindness).text((Math.round(cell.persona.kindness * 100) / 100).toString());
-        $(resource).text(cell.resource.toString());
+        show_cell(json, id);
+        selected_id = id;
     });
     paths.on("click", function () {
         const id = $(this).attr("id").slice(2);
         const path = json.Paths[id];
 
         $(width).text(path.width);
-    })
+    });
+}
+
+function show_cell(json, id) {
+    const cell = json.Cells[id];
+    if (cell === undefined) {
+        $(cell_id).text("消滅")
+    } else {
+        $(cell_id).text(cell.id);
+        $(fearness).text((Math.round(cell.persona.fear * 100) / 100).toString());
+        $(kindness).text((Math.round(cell.persona.kindness * 100) / 100).toString());
+        $(resource).text(cell.resource.toString());
+    }
 }
 
 function show_svg(svg) {
