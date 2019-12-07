@@ -52,18 +52,17 @@ func (p *Path) out(c *Cell) Resource {
 	//もし輸送中じゃないなら
 	if p.Transit == 0 {
 		return 0
-	} else {
-		//もし渡す先が受け取った先と同じなら
-		if p.From != nil && isSame(c.Point, p.From.Point) {
-			//何も渡さない
-			return 0
-		} else {
-			r := p.Transit
-			p.Transit = 0
-			p.From = nil
+		//もし相手が死んでるか自分発の資源じゃなければ
+	} else if p.From == nil || !isSame(c.Point, p.From.Point) {
+		r := p.Transit
+		p.Transit = 0
+		p.From = nil
 
-			return r
-		}
+		return r
+
+		//自分発の資源なら
+	} else {
+		return 0
 	}
 }
 

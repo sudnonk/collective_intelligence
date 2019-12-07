@@ -45,7 +45,6 @@ func (c *Cell) give(to *Path, a Resource) {
 //Pathから資源を受け取る
 func (c *Cell) receive(a Resource) {
 	c.Resource += a
-	c.Resource.adjust()
 }
 
 func (c *Cell) getPaths() *Paths {
@@ -128,6 +127,7 @@ func (c *Cell) recoverAll() {
 		//自身に向けて輸送中の資源を受け取る
 		c.receive(p.out(c))
 	}
+	c.Resource.adjust()
 }
 
 //もし自分の資源が恐怖を感じるほど少なければ、周りに助けを求める
