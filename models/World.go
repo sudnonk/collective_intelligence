@@ -23,9 +23,6 @@ var Roads *MutexPaths
 //その時点で世界座標上のどこに細胞があるか
 var Grid *mat.Dense
 
-//その時点で爆撃の影響を受ける範囲はどこか
-var BombArea *mat.Dense
-
 //その時点で爆撃された地点
 var BombPoint *Point
 
@@ -185,18 +182,7 @@ func findPaths(c *Cell) *Paths {
 func decideBombArea(step int64) {
 	hz := utils.Round(1 / config.BombFrequency())
 	if step%hz == 0 {
-
 		BombPoint = randomPoint()
-		BombArea = mat.NewDense(config.WorldSizeX(), config.WorldSizeY(), nil)
-		for i := BombPoint.X - config.BombRadius(); i < BombPoint.X+config.BombRadius(); i++ {
-			for j := BombPoint.Y - config.BombRadius(); j < BombPoint.Y+config.BombRadius(); j++ {
-				if i < 0 || i >= config.WorldSizeX() || j < 0 || j >= config.WorldSizeY() {
-					continue
-				}
-
-				BombArea.Set(i, j, 1)
-			}
-		}
 	} else {
 		BombPoint = nil
 	}
@@ -207,7 +193,14 @@ func isBombed(p *Point) bool {
 	if BombPoint == nil {
 		return false
 	}
-	return int(BombArea.At(p.X, p.Y)) == 1
+	//Xが範囲内
+	if p.X >= BombPoint.X-config.BombRadius() && p.X <= BombPoint.X+config.BombRadius() {
+		//Yが範囲内
+		if p.Y >= BombPoint.Y-config.BombRadius() && p.Y <= BombPoint.Y+config.BombRadius() {
+			return true
+		}
+	}
+
 }
 
 func searchNear(c *Cell) (*Cell, bool) {
