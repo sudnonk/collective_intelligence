@@ -64,6 +64,9 @@ func Visualize(step int64) {
 		//外枠
 		canvas.Circle(c.Point.X*stretch, c.Point.Y*stretch, diameter*2, fmt.Sprintf("stroke='%s' stroke-width='1' fill='none'", coc))
 
+		//爆撃範囲
+		canvas.Rect(BombPoint.X*stretch, BombPoint.Y*stretch, 10*stretch, 10*stretch, fmt.Sprintf("fill='yellow'"))
+
 		return true
 	})
 
