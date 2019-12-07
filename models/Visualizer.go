@@ -72,7 +72,9 @@ func Visualize(step int64) {
 		canvas.Gend()
 
 		//爆撃範囲
-		canvas.Rect(BombPoint.X*stretch, BombPoint.Y*stretch, 10*stretch, 10*stretch, fmt.Sprintf("fill='yellow'"))
+		if BombPoint != nil {
+			canvas.Rect(BombPoint.X*stretch, BombPoint.Y*stretch, 10*stretch, 10*stretch, fmt.Sprintf("fill='yellow'"))
+		}
 
 		return true
 	})

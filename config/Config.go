@@ -17,6 +17,7 @@ type Config struct {
 	EffectDist    int     //栄養計算に使う細胞の範囲の距離
 	BombRadius    int     //爆撃の範囲
 	BombDamage    int     //爆撃のダメージ
+	BombFrequency float64 //爆撃頻度
 }
 
 var config Config
@@ -93,4 +94,8 @@ func BombRadius() int {
 
 func BombDamage() int {
 	return config.BombDamage
+}
+
+func BonbFrequency() float64 {
+	return config.BombFrequency
 }

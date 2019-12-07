@@ -23,6 +23,7 @@ func main() {
 		EffectDist:    40,
 		BombRadius:    10,
 		BombDamage:    200,
+		BombFrequency: 0.2,
 	})
 
 	//debug.EnableDebug()

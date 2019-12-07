@@ -46,7 +46,7 @@ func Run() {
 	for step := int64(0); step < config.MaxStep(); step++ {
 		s := time.Now().Nanosecond()
 		UpdateGrid()
-		decideBombArea()
+		decideBombArea(step)
 
 		var wg sync.WaitGroup
 
@@ -174,21 +174,30 @@ func findPaths(c *Cell) *Paths {
 }
 
 //爆撃影響範囲を決める
-func decideBombArea() {
-	BombPoint = randomPoint()
-	BombArea = mat.NewDense(config.WorldSizeX(), config.WorldSizeY(), nil)
-	for i := BombPoint.X - config.BombRadius(); i < BombPoint.X+config.BombRadius(); i++ {
-		for j := BombPoint.Y - config.BombRadius(); j < BombPoint.Y+config.BombRadius(); j++ {
-			if i < 0 || i >= config.WorldSizeX() || j < 0 || j >= config.WorldSizeY() {
-				continue
-			}
+func decideBombArea(step int) {
+	hz := int(utils.Round(1 / config.BonbFrequency()))
+	if step%hz == 0 {
 
-			BombArea.Set(i, j, 1)
+		BombPoint = randomPoint()
+		BombArea = mat.NewDense(config.WorldSizeX(), config.WorldSizeY(), nil)
+		for i := BombPoint.X - config.BombRadius(); i < BombPoint.X+config.BombRadius(); i++ {
+			for j := BombPoint.Y - config.BombRadius(); j < BombPoint.Y+config.BombRadius(); j++ {
+				if i < 0 || i >= config.WorldSizeX() || j < 0 || j >= config.WorldSizeY() {
+					continue
+				}
+
+				BombArea.Set(i, j, 1)
+			}
 		}
+	} else {
+		BombPoint = nil
 	}
 }
 
 //その地点が爆撃範囲かを返す
 func isBombed(p *Point) bool {
+	if BombPoint == nil {
+		return false
+	}
 	return int(BombArea.At(p.X, p.Y)) == 1
 }
