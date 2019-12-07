@@ -50,7 +50,7 @@ function show_info(json) {
     const circles = $("[id^=c-]");
     const paths = $("[id^=p-]");
 
-    circles.on("click", () => {
+    circles.on("click", function () {
         console.log(this, $(this));
         const id = $(this).attr("id").slice(2);
         console.log(id);
@@ -58,7 +58,7 @@ function show_info(json) {
         const cell = json.Cells[id];
         console.log(cell);
     });
-    paths.on("click", () => {
+    paths.on("click", function () {
         const id = $(this).attr("id").slice(2);
         const path = json.Paths[id];
         console.log(path);
