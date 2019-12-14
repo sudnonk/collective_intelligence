@@ -145,23 +145,53 @@ func CalcRecover(p *Point) Resource {
 //場所行列から一部を抜き出す
 func cutMatrix(p *Point, r int) mat.Matrix {
 	// |<---->|  |
-	x1 := utils.Min(utils.Max(p.X-r, 0), config.WorldSizeX()-r*2)
+	x1 := right(p.X-r, config.WorldSizeX())
 	// |  |<---->|
-	x2 := utils.Min(p.X+r, config.WorldSizeX())
-	y1 := utils.Min(utils.Max(p.Y-r, 0), config.WorldSizeY()-r*2)
-	y2 := utils.Min(p.Y+r, config.WorldSizeY())
+	x2 := left(p.X+r, config.WorldSizeX())
+	y1 := right(p.Y-r, config.WorldSizeY())
+	y2 := left(p.Y+r, config.WorldSizeY())
 	return Grid.Slice(x1, x2, y1, y2)
+}
+
+func right(x int, r int) int {
+	if x < 0 {
+		return 0
+	}
+	if x > r {
+		return r
+	}
+	return x
+}
+
+func left(x int, l int) int {
+	if x < 0 {
+		return 0
+	}
+	if x > l {
+		return l
+	}
+	return x
 }
 
 //場所行列内にある細胞の数を数える
 func countMatrix(size int, s mat.Matrix) int {
-	r := 0
-	for i := 0; i < size; i++ {
-		for j := 0; j < size; j++ {
-			r += int(s.At(i, j))
+	t := 0
+	r, c := s.Dims()
+	im := size
+	if size > r {
+		im = r
+	}
+	jm := size
+	if size > c {
+		jm = c
+	}
+
+	for i := 0; i < im; i++ {
+		for j := 0; j < jm; j++ {
+			t += int(s.At(i, j))
 		}
 	}
-	return r
+	return t
 }
 
 //Pathsからその細胞に繋がっているPathsを探して返す
