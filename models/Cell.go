@@ -270,6 +270,7 @@ func (c *Cell) connectNear() bool {
 		n, f := searchNear(c)
 		//近くに繋がってない細胞があれば
 		if f == false {
+			debug.Printf("no cells near %s", c.Id)
 			return false
 		}
 
@@ -278,6 +279,7 @@ func (c *Cell) connectNear() bool {
 		c.Resource -= 2 * WidthCost()
 		return true
 	} else {
+		debug.Printf("not enough resource in %s", c.Id)
 		return false
 	}
 }
