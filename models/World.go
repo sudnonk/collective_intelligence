@@ -144,10 +144,12 @@ func CalcRecover(p *Point) Resource {
 
 //場所行列から一部を抜き出す
 func cutMatrix(p *Point, r int) mat.Matrix {
+	// |<---->|  |
 	x1 := utils.Min(utils.Max(p.X-r, 0), config.WorldSizeX()-r*2)
-	x2 := utils.Min(utils.Max(p.X+r, r*2), config.WorldSizeX())
+	// |  |<---->|
+	x2 := utils.Min(p.X+r, config.WorldSizeX())
 	y1 := utils.Min(utils.Max(p.Y-r, 0), config.WorldSizeY()-r*2)
-	y2 := utils.Min(utils.Max(p.Y+r, r*2), config.WorldSizeY())
+	y2 := utils.Min(p.Y+r, config.WorldSizeY())
 	return Grid.Slice(x1, x2, y1, y2)
 }
 
