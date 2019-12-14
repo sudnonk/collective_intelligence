@@ -214,13 +214,17 @@ func searchNear(c *Cell) (*Cell, bool) {
 				//本当に細胞があって
 				if Cells.Exists(id) {
 					t := Cells.Get(fmt.Sprintf("%d,%d", i, j))
+					ip := false
 					for _, p := range *c.getPaths() {
 						//そことの間に道が繋がってなかったら
 						if p.Node1.Id == t.Id || p.Node2.Id == t.Id {
-							continue
+							ip = true
+							break
 						}
 					}
-					return t, true
+					if ip == false {
+						return t, true
+					}
 				}
 			}
 		}
