@@ -112,7 +112,7 @@ function show_cell(json, id) {
         $(kindness).text((Math.round(cell.persona.kindness * 100) / 100).toString());
         $(resource).text(cell.resource.toString());
         $(log).html(cell.log.replace(/\n/g, '<br>'));
-        $("#c-" + id).fill("rgba(0,255,0,127)");
+        $(document.getElementById("c-" + id)).children("path").attr("fill", "green");
     }
 }
 
