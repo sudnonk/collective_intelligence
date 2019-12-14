@@ -10,6 +10,7 @@ const fearness = $("#fearness");
 const kindness = $("#kindness");
 const resource = $("#resource");
 const width = $("#width");
+const log = $("#log");
 
 let step = 0;
 let fps = 5;
@@ -110,6 +111,7 @@ function show_cell(json, id) {
         $(fearness).text((Math.round(cell.persona.fear * 100) / 100).toString());
         $(kindness).text((Math.round(cell.persona.kindness * 100) / 100).toString());
         $(resource).text(cell.resource.toString());
+        $(log).innerHTML = cell.log.replace(/\n/g, '<br>');
     }
 }
 

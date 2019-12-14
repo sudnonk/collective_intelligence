@@ -1,6 +1,7 @@
 package models
 
 import (
+	"fmt"
 	"github.com/sudnonk/collective_intelligence/debug"
 	"math/rand"
 
@@ -16,6 +17,7 @@ type Cell struct {
 	State    cellState `json:"state"`
 	Persona  *Persona  `json:"persona"`
 	IsDead   bool      `json:"is_dead"`
+	Log      string    `json:"log"`
 }
 
 //細胞の状態
@@ -53,6 +55,7 @@ func (c *Cell) getPaths() *Paths {
 
 //この細胞の思考回路
 func (c *Cell) Brain() {
+	c.Log = ""
 	//ダメージを受ける
 	c.bombed()
 
@@ -93,6 +96,7 @@ func (c *Cell) Brain() {
 		return
 	}
 
+	c.Log += "did nothing."
 	debug.Printf("%s did nothing.", c.Id)
 	return
 }
@@ -101,6 +105,7 @@ func (c *Cell) Brain() {
 func (c *Cell) bombed() {
 	if isBombed(c.Point) {
 		c.Resource -= BombDamage()
+		c.Log += "bombed.\n"
 	}
 }
 
@@ -115,9 +120,11 @@ func (c *Cell) deathDetermination() bool {
 	if c.Resource < ResourceLimit() {
 		//死ぬ
 		c.IsDead = true
+		c.Log += "died resource lack.\n"
 		return true
 	} else {
 		c.IsDead = false
+		c.Log += "alive.\n"
 		return false
 	}
 }
@@ -139,11 +146,13 @@ func (c *Cell) needsHelp() bool {
 	if c.Resource.toFloat64() < ResourceMax().toFloat64()*c.Persona.Fear {
 		//周りに助けを求める
 		c.State = needsResource
+		c.Log += "needs help.\n"
 
 		return true
 	} else {
 		c.State = healthy
 
+		c.Log += "healthy.\n"
 		return false
 	}
 }
@@ -164,11 +173,14 @@ func (c *Cell) helpOthers() bool {
 			w := utils.Round(c.Resource.toFloat64() * c.Persona.Kindness)
 			a := p.in(newResource(w), c)
 			c.Resource -= a
+			c.Log += fmt.Sprintf("helped %s.\n", n.Id)
 
 			//その人を助けたら終わり
 			return true
 		}
 	}
+
+	c.Log += "no neighbor needs help.\n"
 	return false
 }
 
@@ -194,6 +206,7 @@ func (c *Cell) makeNewCell() bool {
 			if i > 100 {
 				debug.Printf("no space around %s.", c.Id)
 
+				c.Log += "no space around to make new cell.\n"
 				return false
 			}
 		}
@@ -208,9 +221,13 @@ func (c *Cell) makeNewCell() bool {
 
 		c.Resource = c.Resource - cost - a
 
+		c.Log += fmt.Sprintf("made new cell %s.\n", c2.Id)
+
 		return true
 	} else {
 		debug.Printf("not enough resource %s", c.Id)
+
+		c.Log += "not enough resource.\n"
 		return false
 	}
 }
@@ -254,13 +271,19 @@ func (c *Cell) upgradePath() bool {
 					//広げて終わり
 					c.Resource -= WidthCost()
 					p.expand()
+
+					c.Log += fmt.Sprintf("expand width %s.\n", p.Id)
 					return true
 				}
 			}
 		}
-	}
 
-	return false
+		c.Log += "no paths needs expand.\n"
+		return false
+	} else {
+		c.Log += fmt.Sprintf("not enough resource to expand path.\n")
+		return false
+	}
 }
 
 //近くの細胞との間に道を作る
@@ -271,15 +294,19 @@ func (c *Cell) connectNear() bool {
 		//近くに繋がってない細胞があれば
 		if f == false {
 			debug.Printf("no cells near %s", c.Id)
+			c.Log += "no cells nearby.\n"
 			return false
 		}
 
 		//繋げる
 		connect(c, n)
 		c.Resource -= 2 * WidthCost()
+
+		c.Log += fmt.Sprintf("connect with %s\n", n.Id)
 		return true
 	} else {
 		debug.Printf("not enough resource in %s", c.Id)
+		c.Log += "not enough resources to connect.\n"
 		return false
 	}
 }
