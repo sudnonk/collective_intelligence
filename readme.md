@@ -7,7 +7,7 @@
 ## run
 
 1. Edit `main.go` and decide parameters in Config.
-2. `go build`
+2. `go build` or `go run main.go` (Latter is useful when you tuning parameters.)
 3. Run `collective_intelligence` executable file.
 4. Results will be generated into `json/`
 
