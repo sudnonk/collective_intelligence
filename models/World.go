@@ -180,6 +180,10 @@ func findPaths(c *Cell) *Paths {
 
 //爆撃影響範囲を決める
 func decideBombArea(step int64) {
+	if config.BombFrequency() == 0.0 {
+		BombPoint = nil
+		return
+	}
 	hz := utils.Round(1 / config.BombFrequency())
 	if step%hz == 0 {
 		BombPoint = randomPoint()
