@@ -111,7 +111,7 @@ function show_cell(json, id) {
         $(fearness).text((Math.round(cell.persona.fear * 100) / 100).toString());
         $(kindness).text((Math.round(cell.persona.kindness * 100) / 100).toString());
         $(resource).text(cell.resource.toString());
-        $(log).innerHTML = cell.log.replace(/\n/g, '<br>');
+        $(log).html(cell.log.replace(/\n/g, '<br>'));
     }
 }
 
